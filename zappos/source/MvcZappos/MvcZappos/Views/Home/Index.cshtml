@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <script src="../../Scripts/jquery-1.4.4.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function GetData() {
+            if ($("#product_code").val() == "") { alert("Please enter a product number"); return false; }
+            $("#load").show();
+            $.ajax({
+                type: "post",
+                url: "/home/GetData",
+                data: { product_code: $("#product_code").val() },
+                error: function () { alert("error"); },
+                success: function (data) {
+                    var jsonObj = eval('(' + data + ')');
+                    var str = "";
+                    //alert(jsonObj[0].product[0].brandId);
+                    for (var obj in jsonObj[0].product[0].styles) {
+                        str = "<tr>";
+                        str += "<td>" + jsonObj[0].product[0].productId + "</td>";
+                        str += "<td>" + jsonObj[0].product[0].productName + "</td>";
+                        str += "<td>" + jsonObj[0].product[0].brandId + "</td>";
+                        str += "<td>" + jsonObj[0].product[0].brandName + "</td>";
+                        str += "<td>" + jsonObj[0].product[0].defaultProductUrl + "</td>";
+                        str += "<td>" + jsonObj[0].product[0].styles[obj].color + "</td>";
+                        str += "<td>" + jsonObj[0].product[0].styles[obj].price + "</td>";
+                        str += "</tr>";
+                        $("#my_data").append(str);
+                        //alert(jsonObj[0].product[0].styles[obj].price);
+                        //alert(data[obj].product.brandId);
+                    }
+                    $("#load").hide();
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        Please enter a product number：<input id="product_code" type="text" value="7515478" />
+        &nbsp;<input id="Button1" onclick="GetData();" type="button" value="query" />&nbsp;<img
+            id="load" src="../../loading.gif" style="display: none;" /><br />
+        <table id="my_data" border=1>
+            <tr>
+                <td>
+                    productId
+                </td>
+                <td>
+                    productName
+                </td>
+                <td>
+                    brandId
+                </td>
+                <td>
+                    brandName
+                </td>
+                <td>
+                    defaultProductUrl
+                </td>
+                <td>
+                    color
+                </td>
+                <td>
+                    price
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
